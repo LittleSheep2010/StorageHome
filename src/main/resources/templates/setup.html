@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>StorageHome | Setup</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="pt-3">
+        <section th:switch="${step}">
+            <div th:case="0">
+                <h2>Welcome use StorageHome</h2>
+                <span>Before you use StorageHome, we need you help to set up StorageHome. Don't worry, it's easy to finish!</span> <br>
+                <span>There's a checklist you need to check your server with this list before your setup StorageHome:</span> <br>
+                <ol>
+                    <li>Make sure the database is work properly</li>
+                    <li>Make sure you have permission to allow StorageHome change your database, no only view it</li>
+                    <li>Check the options in <code>application.properties</code> all are valid and no temporary</li>
+                    <li>Make sure the server will not sudden power outages during installation</li>
+                    <li>Make sure the disk have enough space</li>
+                    <li>If you use docker to deploy, check the image version is latest or long term support version, that way you're less likely to have problems</li>
+                    <li>If you just run the executable file to deploy, please check your operating system is in the support list</li>
+                </ol>
+                <span>If you are ready, just click next button</span> <br>
+                <a th:href="@{/setup(step=${step + 1})}" class="mt-3 btn btn-success">Next</a>
+            </div>
+            <div th:case="1">
+                <h2>Database setup</h2>
+                <span>Before set administer, we need you help StorageHome setup database we need to use</span> <br>
+                <span>Don't worry, it is really easy to set, before all, please open a connection to StorageHome use database with a shell</span> <br>
+                <span>And make sure StorageHome use database charset is <b>utf8mb4</b>, then we can show and add some beautiful char and storage more data</span> <br>
+                <span><b>The most important point is the script assumption your database name is <code>storagehome</code>, is your database name isn't it, please modify the script!</b></span> <br>
+                <span>Let's setup the database!</span> <br> <br>
+
+                <pre><code class="language-sql">-- If you didn't set the database charset as `utf8mb4`, drop current database and recreate a new database use this command and reconfigure StorageHome config file
+-- create schema storagehome collate utf8mb4_0900_ai_ci;
+-- create `configs` table
+create table if not exists storagehome.configs
+(
+    id    int auto_increment,
+    name  text not null,
+    value text not null,
+    constraint configs_id_uindex
+        unique (id)
+);
+
+alter table storagehome.configs
+    add primary key (id);
+
+-- create `users` table
+create table if not exists storagehome.users
+(
+    uuid        varchar(32) not null,
+    role        text        not null,
+    username    text        not null,
+    email       text        not null,
+    create_time datetime    not null,
+    password    text        not null,
+    constraint users_uuid_uindex
+        unique (uuid)
+);
+
+alter table storagehome.users
+    add primary key (uuid);</code></pre>
+
+                <span>If your database are ready, just click next button</span> <br>
+                <a th:href="@{/setup(step=${step + 1})}" class="mt-3 btn btn-success">Next</a>
+            </div>
+            <div th:case="2">
+                <h2>Set administer</h2>
+                <span>You need to create user is the StorageHome administer user. This is very important! You cannot change it user id and recovery password</span> <br>
+                <span>You cannot skip this step or delete the root(administer) account!</span> <br> <br>
+                <form th:action="@{/setup/set-administer}" th:object="${admin}" method="post">
+                    <div class="mb-3">
+                        <label for="adminUsername" class="form-label">Administer name</label>
+                        <input type="text" class="form-control" id="adminUsername" th:field="*{username}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="adminEmail" class="form-label">Administer email</label>
+                        <input type="email" class="form-control" id="adminEmail" th:field="*{email}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="adminPassword" class="form-label">Administer password</label>
+                        <input type="password" class="form-control" id="adminPassword" th:field="*{password}" required>
+                    </div>
+                    <button type="submit" class="btn btn-success">Next</button>
+                </form>
+            </div>
+            <div th:case="3">
+                <h2>All are set!</h2>
+                <span>You just need click this button and enjoy your StorageHome, else things we will process it!</span> <br>
+                <span><b>If you found some error after setup, please goto view our user manual!</b></span> <br>
+
+                <a th:href="@{/setup/done}" class="mt-3 btn btn-success">Enjoy</a>
+            </div>
+            <div th:case="*">
+                <span>Oh! I guess we couldn't find your want setup step! Let's take you to homepage OK?</span> <br>
+                <a th:href="@{/}" class="mt-3 btn btn-success">Goto homepage</a>
+            </div>
+        </section>
+    </div>
+
+<script>
+    (function () {
+        const forms = document.querySelectorAll('.needs-validation')
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+</script>
+</div>
+</body>
+</html>

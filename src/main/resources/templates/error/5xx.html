@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>StorageHome | Error</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="position-absolute top-50 start-50 translate-middle text-center">
+        <h1 class="text-warning" style="font-size: 11.5rem" th:text="${status}"></h1>
+        <span th:text="${error}"></span> <br>
+        <span th:if="${message} != 'No message available'" th:text="${message}"></span>
+        <span th:if="${message} == 'No message available'" class="text-secondary">No more description</span> <br> <br>
+
+        <section th:switch="${status}">
+            <span th:case="500"><b>Call the administrator or open an issues on our repo</b></span>
+            <span th:case="503"><b>Call the administrator <del>or call the 911/110</del></b></span>
+            <span th:case="*"><b>Oops...</b></span>
+        </section>
+    </div>
+</div>
+</body>
+</html>
