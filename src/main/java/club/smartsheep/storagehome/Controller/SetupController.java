@@ -5,6 +5,7 @@ import club.smartsheep.storagehome.DAO.Entity.UserEntity;
 import club.smartsheep.storagehome.DAO.Mappers.ConfigMapper;
 import club.smartsheep.storagehome.DAO.Mappers.UserMapper;
 import club.smartsheep.storagehome.Services.CacheService;
+import club.smartsheep.storagehome.Utils.EncryptionUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -42,6 +43,7 @@ public class SetupController {
     @PostMapping("/set-administer")
     public String SetAdminister(RedirectAttributes redirectAttributes, UserEntity entity) {
         entity.setRole("administer");
+        entity.setPassword(EncryptionUtils.md5encrypt(entity.getPassword()));
         userMapper.insert(entity);
 
         return "redirect:/setup?step=2";

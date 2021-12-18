@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>StorageHome | Login</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="pt-4">
+        <h2>Login</h2> <br>
+        <form th:action="@{/account/login/commit}" th:object="${user}" method="post">
+            <div class="mb-3">
+                <label for="userIdentify" class="form-label">Username or email</label>
+                <input type="text" class="form-control" id="userIdentify" th:field="*{username}" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Administer name</label>
+                <input type="password" class="form-control" id="password" th:field="*{password}" required>
+            </div>
+            <button type="submit" class="btn btn-success">Next</button>
+        </form>
+    </div>
+
+    <script>
+        (function () {
+            const forms = document.querySelectorAll('.needs-validation')
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+    </script>
+</div>
+</body>
+</html>
