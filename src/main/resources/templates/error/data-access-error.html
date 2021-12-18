@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>StorageHome | Database Error</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="position-absolute top-50 start-50 translate-middle text-center">
+        <h1 class="text-secondary" style="font-size: 11.5rem">Oops</h1> <br>
+        <span>We failed to fetch information from your target database.</span> <br>
+        <span>We have two options for you, the first is automatic create we want table, but this option cannot process code error or database internal error.</span> <br>
+        <span>The second option. We need you to check the database, and we will clean all cache and retry.</span> <br> <br>
+
+        <a class="btn btn-link" th:href="@{/error/database/init}">Init database</a>&nbsp;&nbsp;&nbsp;
+        <a class="btn btn-link" th:href="@{/error/database/retry}">Retry(Send you to dashboard(May need setup))</a>
+    </div>
+</div>
+</body>
+</html>

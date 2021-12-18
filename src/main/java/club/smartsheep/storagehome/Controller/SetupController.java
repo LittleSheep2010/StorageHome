@@ -44,7 +44,7 @@ public class SetupController {
         entity.setRole("administer");
         userMapper.insert(entity);
 
-        return "redirect:/setup?step=3";
+        return "redirect:/setup?step=2";
     }
 
     @GetMapping("/done")

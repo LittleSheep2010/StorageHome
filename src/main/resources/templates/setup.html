@@ -25,48 +25,6 @@
                 <a th:href="@{/setup(step=${step + 1})}" class="mt-3 btn btn-success">Next</a>
             </div>
             <div th:case="1">
-                <h2>Database setup</h2>
-                <span>Before set administer, we need you help StorageHome setup database we need to use</span> <br>
-                <span>Don't worry, it is really easy to set, before all, please open a connection to StorageHome use database with a shell</span> <br>
-                <span>And make sure StorageHome use database charset is <b>utf8mb4</b>, then we can show and add some beautiful char and storage more data</span> <br>
-                <span><b>The most important point is the script assumption your database name is <code>storagehome</code>, is your database name isn't it, please modify the script!</b></span> <br>
-                <span>Let's setup the database!</span> <br> <br>
-
-                <pre><code class="language-sql">-- If you didn't set the database charset as `utf8mb4`, drop current database and recreate a new database use this command and reconfigure StorageHome config file
--- create schema storagehome collate utf8mb4_0900_ai_ci;
--- create `configs` table
-create table if not exists storagehome.configs
-(
-    id    int auto_increment,
-    name  text not null,
-    value text not null,
-    constraint configs_id_uindex
-        unique (id)
-);
-
-alter table storagehome.configs
-    add primary key (id);
-
--- create `users` table
-create table if not exists storagehome.users
-(
-    uuid        varchar(32) not null,
-    role        text        not null,
-    username    text        not null,
-    email       text        not null,
-    create_time datetime    not null,
-    password    text        not null,
-    constraint users_uuid_uindex
-        unique (uuid)
-);
-
-alter table storagehome.users
-    add primary key (uuid);</code></pre>
-
-                <span>If your database are ready, just click next button</span> <br>
-                <a th:href="@{/setup(step=${step + 1})}" class="mt-3 btn btn-success">Next</a>
-            </div>
-            <div th:case="2">
                 <h2>Set administer</h2>
                 <span>You need to create user is the StorageHome administer user. This is very important! You cannot change it user id and recovery password</span> <br>
                 <span>You cannot skip this step or delete the root(administer) account!</span> <br> <br>
@@ -86,7 +44,7 @@ alter table storagehome.users
                     <button type="submit" class="btn btn-success">Next</button>
                 </form>
             </div>
-            <div th:case="3">
+            <div th:case="2">
                 <h2>All are set!</h2>
                 <span>You just need click this button and enjoy your StorageHome, else things we will process it!</span> <br>
                 <span><b>If you found some error after setup, please goto view our user manual!</b></span> <br>
