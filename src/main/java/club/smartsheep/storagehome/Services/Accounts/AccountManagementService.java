@@ -47,7 +47,6 @@ public class AccountManagementService {
         UserEntity user = userMapper.selectOne(new QueryWrapper<UserEntity>().eq("username", identification));
         if(user == null) {
             // If system cannot find target account by username, try find it use email
-            log.warn("This identification isn't username: " + identification);
             user = userMapper.selectOne(new QueryWrapper<UserEntity>().eq("email", identification));
         }
 

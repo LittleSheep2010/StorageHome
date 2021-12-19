@@ -11,22 +11,14 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter;
-import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
-import org.springframework.security.web.savedrequest.RequestCache;
-import org.springframework.security.web.savedrequest.SavedRequest;
+import org.springframework.security.web.WebAttributes;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
-import javax.servlet.*;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import javax.servlet.http.HttpSession;
 
 @Slf4j
 @Configuration
@@ -64,16 +56,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/setup").permitAll()
                 .antMatchers("/setup/**").permitAll()
                 .antMatchers("/error/**").permitAll()
+                .antMatchers("/account/logout").authenticated()
                 .antMatchers("/account/login").permitAll()
+                .antMatchers("/account/login/**").permitAll()
                 .antMatchers("/webjars/**").permitAll()
                 .anyRequest().authenticated();
-        http.rememberMe().key("password").userDetailsService(authDetailService);
+        http.rememberMe().key("JSESSIONID").userDetailsService(authDetailService).and().logout().deleteCookies("JSESSIONID");
 
         http.cors().disable();
         http.csrf().disable();
 
         http
-                .formLogin();
+                .formLogin()
+                .loginProcessingUrl("/account/login/commit")
+                .loginPage("/account/login")
+                .failureForwardUrl("/account/login?error=true")
+                .and()
+                .logout()
+                .logoutUrl("/account/logout")
+                .logoutSuccessUrl("/account/login?logout=true");
     }
 
     @Bean

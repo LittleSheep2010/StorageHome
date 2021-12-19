@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>StorageHome | Login</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="pt-3">
+        <div class="alert alert-danger" th:if="${error}">Wrong username or email address and password!</div>
+        <div class="alert alert-success" th:if="${logout}">Successful logout!</div>
+        <h2>Login</h2>
+        <form name="f" action="/account/login/commit" method="post">
+            <div class="mb-3">
+                <label for="username" class="form-label">Username or email</label>
+                <input type="text" class="form-control" id="username" name="username" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Administer password</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="remember">
+                <label class="form-check-label" for="remember" name="remember-me">Remember me</label>
+            </div>
+            <button type="submit" class="btn btn-success">Login</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    (function () {
+        const forms = document.querySelectorAll('.needs-validation')
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+</script>
+</div>
+</body>
+</html>
