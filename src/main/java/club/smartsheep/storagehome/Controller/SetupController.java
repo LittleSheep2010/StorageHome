@@ -3,9 +3,8 @@ package club.smartsheep.storagehome.Controller;
 import club.smartsheep.storagehome.DAO.Entity.ConfigEntity;
 import club.smartsheep.storagehome.DAO.Entity.UserEntity;
 import club.smartsheep.storagehome.DAO.Mappers.ConfigMapper;
-import club.smartsheep.storagehome.DAO.Mappers.UserMapper;
+import club.smartsheep.storagehome.Services.Accounts.AccountManagementService;
 import club.smartsheep.storagehome.Services.CacheService;
-import club.smartsheep.storagehome.Utils.EncryptionUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,26 +24,29 @@ public class SetupController {
     CacheService cacheService;
 
     @Autowired
-    private UserMapper userMapper;
+    AccountManagementService accountManagementService;
 
     @Autowired
     private ConfigMapper configMapper;
 
     @RequestMapping()
-    public String Setup(Model model, @RequestParam(name = "step", required = false) Integer step) {
+    public String Setup(Model model, @RequestParam(name = "step", required = false) Integer step, @RequestParam(name = "message", required = false) String message) {
         if(step == null) {
             step = 0;
         }
         model.addAttribute("admin", new UserEntity());
         model.addAttribute("step", step);
+        model.addAttribute("lmessage_danger", message);
         return "setup";
     }
 
     @PostMapping("/set-administer")
     public String SetAdminister(RedirectAttributes redirectAttributes, UserEntity entity) {
         entity.setRole("administer");
-        entity.setPassword(EncryptionUtils.md5encrypt(entity.getPassword()));
-        userMapper.insert(entity);
+        AccountManagementService.AddResponse response = accountManagementService.addNewUser(entity);
+        if(response != AccountManagementService.AddResponse.Successful) {
+            return "redirect:/setup?setup=1&message=The%20set%20administer%20step%20is%20failed";
+        }
 
         return "redirect:/setup?step=2";
     }
