@@ -30,10 +30,11 @@ public class SetupController {
     private ConfigMapper configMapper;
 
     @RequestMapping()
-    public String Setup(Model model, @RequestParam(name = "step", required = false) Integer step, @RequestParam(name = "message", required = false) String message) {
-        if(step == null) {
-            step = 0;
+    public String Setup(Model model, @RequestParam(defaultValue = "0") Integer step, @RequestParam(required = false) String message) {
+        if(configMapper.selectByName("setup.done") != null && configMapper.selectByName("setup.done").getValue().equalsIgnoreCase("TRUE")) {
+            return "redirect:/";
         }
+
         model.addAttribute("admin", new UserEntity());
         model.addAttribute("step", step);
         model.addAttribute("lmessage_danger", message);

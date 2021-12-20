@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout.html}">
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout.html}" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>StorageHome</title>
@@ -7,7 +8,36 @@
 <body>
 <div layout:fragment="content">
     <div class="pt-3">
-        <h3>Dashboard</h3>
+        <h3 class="pt-2 pb-2">Dashboard</h3>
+        <div class="row">
+            <div class="col-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Account Count</h5>
+                        <p class="card-text" th:text="${count_users}"></p>
+                        <a th:href="@{/account}" class="card-link" sec:authorize="hasAuthority('administer')">Go to management</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Items Count</h5>
+                        <p class="card-text" th:text="${count_items}"></p>
+                        <a href="#" class="card-link" sec:authorize="hasAuthority('administer')">Go to management</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Regions Count</h5>
+                        <p class="card-text" th:text="${count_regions}"></p>
+                        <a href="#" class="card-link" sec:authorize="hasAuthority('administer')">Go to management</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 </body>

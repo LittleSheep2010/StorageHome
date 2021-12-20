@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.annotation.security.RolesAllowed;
 
 @Controller
-@RolesAllowed({"user", "administer"})
+@RolesAllowed({"user"})
 public class IndexController {
     @RequestMapping("/")
     public String index() {
